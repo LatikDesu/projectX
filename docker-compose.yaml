@@ -26,7 +26,7 @@ services:
     env_file:
       - ./server/.env
     volumes:
-      - local_pg_data:/var/lib/postgresql/data
+      - ./local_pg_data:/var/lib/postgresql/data
 
 #  nginx:
 #    container_name: nginx
@@ -44,4 +44,3 @@ services:
 
 volumes:
   static:
-  local_pg_data:
