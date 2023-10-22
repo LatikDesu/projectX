@@ -8,6 +8,7 @@ services:
       dockerfile: docker/server/Dockerfile
     volumes:
       - static:/app/server/static
+      - sql_db:/app/server/sql_db
     restart: always
     ports:
       - 8000:8000
@@ -17,7 +18,7 @@ services:
       - db
 
   db:
-    image: postgres:15.3
+    image: postgres:15
     hostname: db
     container_name: db
     restart: always
@@ -26,7 +27,12 @@ services:
     env_file:
       - ./server/.env
     volumes:
-      - ./local_pg_data:/var/lib/postgresql/data
+      - ./server/pg_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 #  nginx:
 #    container_name: nginx
@@ -44,3 +50,4 @@ services:
 
 volumes:
   static:
+  sql_db:

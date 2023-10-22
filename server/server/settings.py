@@ -98,13 +98,13 @@ if DEVELOPMENT_MODE is True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'sql_db/db.sqlite3',
         }
     }
 else:
     DATABASES = {
         "default": {
-            "ENGINE": getenv("SQL_ENGINE", "django.db.backends.postgresql"),
+            "ENGINE": getenv("SQL_ENGINE", "django.db.backends.postgresql_psycopg2"),
             "NAME": getenv("SQL_DATABASE", "game_db"),
             "USER": getenv("SQL_USER", "postgres"),
             "PASSWORD": getenv("SQL_PASSWORD", "postgres"),
