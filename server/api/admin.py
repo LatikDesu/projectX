@@ -10,7 +10,6 @@ class EquipmentAdmin(admin.ModelAdmin):
         'description',
     )
 
-
 class HarvestAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -65,7 +64,7 @@ class MinigameInline(admin.TabularInline):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'gender', 'own_money', 'own_coins', 'top_score')
+    list_display = ('name','id', 'own_money', 'own_coins', 'top_score')
     inlines = [EquipmentInline, HarvestInline, MinigameInline]
     save_on_top = True
     save_as = True

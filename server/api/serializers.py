@@ -41,10 +41,6 @@ class PlayerMinigameSerializer(ModelSerializer):
         fields = ('minigame_name', 'available',
                   'complete', 'score', 'achievement')
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['score'].read_only = self.instance and self.instance.score != 0
-
 
 class PlayerSerializer(ModelSerializer):
     class Meta:
