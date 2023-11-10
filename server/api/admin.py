@@ -64,8 +64,8 @@ class MinigameInline(admin.TabularInline):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('name','id', 'own_money', 'own_coins', 'top_score')
-    inlines = [EquipmentInline, HarvestInline, MinigameInline]
+    list_display = ('name','id', 'own_money', 'own_coins', 'top_score', 'user_review')
+    inlines = [EquipmentInline, MinigameInline]
     save_on_top = True
     save_as = True
     fieldsets = (
@@ -73,7 +73,7 @@ class PlayerAdmin(admin.ModelAdmin):
             "fields": (("name", "gender"),)
         }),
         (None, {
-            "fields": (("own_money", "own_coins", "top_score"),)
+            "fields": (("own_money", "own_coins", "top_score", "user_review"),)
         }),
     )
 
