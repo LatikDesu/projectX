@@ -14,4 +14,4 @@ sleep 10
 /app/server/scripts/createsuperuser.sh
 /app/server/scripts/loaddata.sh
 
-/opt/venv/bin/gunicorn --reload --worker-tmp-dir /dev/shm --bind "${APP_HOST}:${APP_PORT}" --log-config $LOG_CONFIG "$APP_MODULE"
+/opt/venv/bin/gunicorn --worker-tmp-dir /dev/shm --bind "${APP_HOST}:${APP_PORT}" --log-config $LOG_CONFIG "$APP_MODULE"

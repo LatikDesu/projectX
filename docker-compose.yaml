@@ -7,7 +7,6 @@ services:
       context: .
       dockerfile: docker/server/Dockerfile
     volumes:
-      - ./server:/app/server
       - static:/app/server/static
       - sql_db:/app/server/sql_db
     restart: always
