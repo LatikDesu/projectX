@@ -59,32 +59,37 @@ class LiderboardView(ReadOnlyModelViewSet):
                 examples=[
                     OpenApiExample(
                         name='Список лидеров',
-                        value=[
-                            {
+                        value={
+                            "total_players": 4,
+                            "players_with_reviews": 2,
+                            "average_review": 5,
+                            "leaderboard": [
+                                {
                                 "name": "Doom Guy",
-                                "own_coins": 751,
-                                "own_money": 5000,
-                                "top_score": 751,
+                                "own_coins": 500,
+                                "own_money": 3698,
                                 "user_review": 5,
+                                "top_score": 500,
                                 "achievement": {
-                                    "gameOne": {
-                                        "achievement": False
-                                    },
-                                    "gameTwo": {
-                                        "achievement": False
+                                    "gameFive": {
+                                    "achievement": False
                                     },
                                     "gameThree": {
-                                        "achievement": False
+                                    "achievement": False
+                                    },
+                                    "gameOne": {
+                                    "achievement": True
+                                    },
+                                    "gameTwo": {
+                                    "achievement": True
                                     },
                                     "gameFour": {
-                                        "achievement": False
-                                    },
-                                    "gameFive": {
-                                        "achievement": True
+                                    "achievement": True
                                     }
+                                },
                                 }
+                            ]
                             }
-                        ]
                     )
                 ]),
             **common_minigame_status_codes
@@ -92,8 +97,31 @@ class LiderboardView(ReadOnlyModelViewSet):
     )
     def list(self, request):
         queryset = self.get_queryset()
+        
+        total_players = Player.objects.count()
+        players_with_reviews = Player.objects.exclude(user_review=None).count()
+        average_review = Player.objects.exclude(user_review=None).aggregate(Avg('user_review'))['user_review__avg']
+
+        if average_review is None:
+            average_review = 0.0 
+            
+        data = {
+            "total_players": total_players,
+            "players_with_reviews": players_with_reviews,
+            "average_review": average_review,
+        }
+
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        serialized_data = serializer.data
+        
+        response_data = {
+            "total_players": data['total_players'],
+            "players_with_reviews": data['players_with_reviews'],
+            "average_review": data['average_review'],
+            "leaderboard": serialized_data,
+        }
+        
+        return Response(response_data)
 
     @extend_schema(
         exclude=True
@@ -127,6 +155,8 @@ class LiderboardView(ReadOnlyModelViewSet):
                             "own_coins": 0,
                             "top_score": 0,
                             "total_players": 4,
+                            "players_with_reviews": 2,
+                            "average_review": 5,
                             "liderdoard": [
                                 {
                                     "name": "Top_player",
@@ -194,6 +224,8 @@ class LiderboardView(ReadOnlyModelViewSet):
             "top_score": player.top_score,
             "user_review": player.user_review,
             "total_players": players.count(),
+            "players_with_reviews": players.exclude(user_review=None).count(),
+            "average_review": players.exclude(user_review=None).aggregate(Avg('user_review'))['user_review__avg'],
             "liderdoard": serializer_board.data
         }
 

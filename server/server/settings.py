@@ -200,6 +200,10 @@ SPECTACULAR_SETTINGS = {
             'description': 'Работа с рейтингом игроков',
         },
         {
+            'name': 'Statistics',
+            'description': 'Общая статистика',
+        },
+        {
             'name': 'Equipment',
             'description': 'Работа с моделями класса Оборудование',
         },
