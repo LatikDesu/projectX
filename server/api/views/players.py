@@ -10,74 +10,77 @@ from rest_framework.decorators import action
 from ..models import Player
 from ..serializers import PlayerSerializer
 
+common_value={
+    "id": 1,
+    "name": "Doom Guy",
+    "gender": "Male",
+    "own_money": 1000,
+    "own_coins": 0,
+    "credit": 0,
+    "user_review": None,
+    "equipment": {
+        "software": {
+            "available": False
+        },
+        "bpla": {
+            "available": False
+        },
+        "robot": {
+            "available": False
+        }
+    },
+    "harvest": {
+        "tomatoes": {
+            "harvest_amount": 0,
+            "available": True,
+            "gen_modified": False
+        },
+        "peppers": {
+            "harvest_amount": 0,
+            "available": False,
+            "gen_modified": False
+        },
+        "strawberries": {
+            "harvest_amount": 0,
+            "available": False,
+            "gen_modified": False
+        }
+    },
+    "minigame": {
+        "gameOne": {
+            "available": True,
+            "complete": False,
+            "score": 0
+        },
+        "gameTwo": {
+            "available": False,
+            "complete": False,
+            "score": 0
+        },
+        "gameThree": {
+            "available": False,
+            "complete": False,
+            "score": 0
+        },
+        "gameFour": {
+            "available": False,
+            "complete": False,
+            "score": 0
+        },
+        "gameFive": {
+            "available": False,
+            "complete": False,
+            "score": 0
+        }
+    }}
+
 common_player_status_codes = {
     status.HTTP_200_OK: OpenApiResponse(
         response=PlayerSerializer,
         examples=[
             OpenApiExample(
                 'Данные об игроке',
-                value={
-                    "id": 1,
-                    "name": "Doom Guy",
-                    "gender": "Male",
-                    "own_money": 1000,
-                    "own_coins": 0,
-                    "credit": 0,
-                    "equipment": {
-                        "software": {
-                            "available": False
-                        },
-                        "bpla": {
-                            "available": False
-                        },
-                        "robot": {
-                            "available": False
-                        }
-                    },
-                    "harvest": {
-                        "tomatoes": {
-                            "harvest_amount": 0,
-                            "available": True,
-                            "gen_modified": False
-                        },
-                        "peppers": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        },
-                        "strawberries": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        }
-                    },
-                    "minigame": {
-                        "gameOne": {
-                            "available": True,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameTwo": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameThree": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFour": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFive": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        }
-                    }},
+                value=common_value,
             )
         ],
         description='Ответ Получен'
@@ -144,6 +147,7 @@ class PlayerViewSet(ModelViewSet):
     - `own_money`: Количество гринкоинов у игрока (по умолчанию 0).
     - `own_coins`: Количество заработаннывх очков у игрока (по умолчанию 0).
     - `credit`: Размер кредита от банка (по умолчанию 0).
+    - `user_review`: Оценка игры пользователем (по умолчанию Null).
     - `equipment`: Связанные записи оборудования игрока (создаются автоматически).
     - `harvest`: Связанные записи урожая игрока (создаются автоматически).
     - `minigame`: Связанные записи мини-игр игрока (создаются автоматически).
@@ -158,68 +162,7 @@ class PlayerViewSet(ModelViewSet):
                     OpenApiExample(
                         name='Данные об игроке',
                         summary='Данные об игроке',
-                        value={
-                            "id": 1,
-                            "name": "Doom Guy",
-                            "gender": "Male",
-                            "own_money": 0,
-                            "own_coins": 0,
-                            "credit": 0,
-                            "equipment": {
-                                "software": {
-                                    "available": False
-                                },
-                                "bpla": {
-                                    "available": False
-                                },
-                                "robot": {
-                                    "available": False
-                                }
-                            },
-                            "harvest": {
-                                "tomatoes": {
-                                    "harvest_amount": 0,
-                                    "available": True,
-                                    "gen_modified": False
-                                },
-                                "peppers": {
-                                    "harvest_amount": 0,
-                                    "available": False,
-                                    "gen_modified": False
-                                },
-                                "strawberries": {
-                                    "harvest_amount": 0,
-                                    "available": False,
-                                    "gen_modified": False
-                                }
-                            },
-                            "minigame": {
-                                "gameOne": {
-                                    "available": True,
-                                    "complete": False,
-                                    "score": 0
-                                },
-                                "gameTwo": {
-                                    "available": False,
-                                    "complete": False,
-                                    "score": 0
-                                },
-                                "gameThree": {
-                                    "available": False,
-                                    "complete": False,
-                                    "score": 0
-                                },
-                                "gameFour": {
-                                    "available": False,
-                                    "complete": False,
-                                    "score": 0
-                                },
-                                "gameFive": {
-                                    "available": False,
-                                    "complete": False,
-                                    "score": 0
-                                }
-                            }},
+                        value=common_value,
                     )
                 ],
                 description='Создано'
@@ -231,9 +174,7 @@ class PlayerViewSet(ModelViewSet):
                 name='Создание игрока',
                 value={
                     "name": "Doom Guy",
-                    "gender": "Male",
-                    "own_money": 0,
-                    "credit": 0,
+                    "gender": "Male"
                 },
             )
         ]
@@ -261,68 +202,7 @@ class PlayerViewSet(ModelViewSet):
             OpenApiExample(
                 name='Данные об игроке',
                 summary='Данные об игроке',
-                value={
-                    "id": 1,
-                    "name": "Doom Guy",
-                    "gender": "Male",
-                    "own_money": 0,
-                    "own_coins": 0,
-                    "credit": 0,
-                    "equipment": {
-                        "software": {
-                            "available": False
-                        },
-                        "bpla": {
-                            "available": False
-                        },
-                        "robot": {
-                            "available": False
-                        }
-                    },
-                    "harvest": {
-                        "tomatoes": {
-                            "harvest_amount": 0,
-                            "available": True,
-                            "gen_modified": False
-                        },
-                        "peppers": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        },
-                        "strawberries": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        }
-                    },
-                    "minigame": {
-                        "gameOne": {
-                            "available": True,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameTwo": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameThree": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFour": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFive": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        }
-                    }},
+                value=common_value,
             )
         ],
     )
@@ -370,66 +250,7 @@ class PlayerViewSet(ModelViewSet):
             OpenApiExample(
                 name='Данные об игроке',
                 summary='Данные об игроке',
-                value={
-                    "name": "Doom Guy",
-                    "own_money": 5000,
-                    "own_coins": 0,
-                    "credit": 0,
-                    "equipment": {
-                        "software": {
-                            "available": False
-                        },
-                        "bpla": {
-                            "available": False
-                        },
-                        "robot": {
-                            "available": False
-                        }
-                    },
-                    "harvest": {
-                        "tomatoes": {
-                            "harvest_amount": 0,
-                            "available": True,
-                            "gen_modified": False
-                        },
-                        "peppers": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        },
-                        "strawberries": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        }
-                    },
-                    "minigame": {
-                        "gameOne": {
-                            "available": True,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameTwo": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameThree": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFour": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFive": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        }
-                    }},
+                value=common_value,
             )
         ],
     )
@@ -524,65 +345,7 @@ class PlayerViewSet(ModelViewSet):
             OpenApiExample(
                 name='Данные об игроке',
                 summary='Данные об игроке',
-                value={
-                    "own_money": 5000,
-                    "own_coins": 0,
-                    "credit": 0,
-                    "equipment": {
-                        "software": {
-                            "available": False
-                        },
-                        "bpla": {
-                            "available": False
-                        },
-                        "robot": {
-                            "available": False
-                        }
-                    },
-                    "harvest": {
-                        "tomatoes": {
-                            "harvest_amount": 0,
-                            "available": True,
-                            "gen_modified": False
-                        },
-                        "peppers": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        },
-                        "strawberries": {
-                            "harvest_amount": 0,
-                            "available": False,
-                            "gen_modified": False
-                        }
-                    },
-                    "minigame": {
-                        "gameOne": {
-                            "available": True,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameTwo": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameThree": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFour": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        },
-                        "gameFive": {
-                            "available": False,
-                            "complete": False,
-                            "score": 0
-                        }
-                    }},
+                value=common_value,
             )
         ],
 

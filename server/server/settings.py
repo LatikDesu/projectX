@@ -211,7 +211,6 @@ SPECTACULAR_SETTINGS = {
             'name': 'Minigame',
             'description': 'Работа с моделями класса Миниигры',
         },
-
     ],
 }
 

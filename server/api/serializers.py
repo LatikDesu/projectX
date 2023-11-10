@@ -1,5 +1,4 @@
 from rest_framework.serializers import ModelSerializer
-from rest_framework import serializers
 
 from .models import Player, Equipment, Harvest, Minigame, PlayerEquipment, PlayerHarvest, PlayerMinigame
 
@@ -45,7 +44,7 @@ class PlayerMinigameSerializer(ModelSerializer):
 class PlayerSerializer(ModelSerializer):
     class Meta:
         model = Player
-        fields = ('id', 'name', 'gender', 'own_money', 'own_coins',
+        fields = ('id', 'name', 'gender', 'own_money', 'own_coins', 'user_review',
                   'credit', 'equipment', 'harvest', 'minigame')
 
     equipment = PlayerEquipmentSerializer(
@@ -100,6 +99,7 @@ class PlayerSerializer(ModelSerializer):
         instance.own_coins = validated_data.get(
             'own_coins', instance.own_coins)
         instance.credit = validated_data.get('credit', instance.credit)
+        instance.user_review = validated_data.get('user_review', instance.user_review)
 
         # Проверяем, если own_coins больше текущего top_score, то обновляем top_score
         if validated_data.get('own_coins', instance.own_coins) > instance.top_score:
@@ -165,5 +165,5 @@ class LeaderboardPlayerSerializer(ModelSerializer):
 
     class Meta:
         model = Player
-        fields = ('name', 'own_coins', 'own_money',
+        fields = ('name', 'own_coins', 'own_money', 'user_review',
                   'achievement', 'top_score')

@@ -1,4 +1,5 @@
 from rest_framework.routers import SimpleRouter
+from django.urls import path
 
 from .views.equipments import EquipmentViewSet
 from .views.harvests import HarvestViewSet

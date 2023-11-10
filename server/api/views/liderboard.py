@@ -4,8 +4,10 @@ from rest_framework import status
 from drf_spectacular.views import extend_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from django.db.models import Avg
 
 from ..models import Player
 from ..serializers import PlayerSerializer, LeaderboardPlayerSerializer, PlayerMinigameSerializer
@@ -63,6 +65,7 @@ class LiderboardView(ReadOnlyModelViewSet):
                                 "own_coins": 751,
                                 "own_money": 5000,
                                 "top_score": 751,
+                                "user_review": 5,
                                 "achievement": {
                                     "gameOne": {
                                         "achievement": False
@@ -117,15 +120,20 @@ class LiderboardView(ReadOnlyModelViewSet):
                     OpenApiExample(
                         name='Список лидеров',
                         value=[{
-                            "player_id": 42,
-                            "place": 17,
-                            "total_players": 54,
+                            "player_id": 6,
+                            "player_name": "Doom Guy 3",
+                            "place": 4,
+                            "achievement_count": 0,
+                            "own_coins": 0,
+                            "top_score": 0,
+                            "total_players": 4,
                             "liderdoard": [
                                 {
                                     "name": "Top_player",
                                     "own_coins": 0,
                                     "own_money": 0,
                                     "top_score": 800,
+                                    "user_review": 5,
                                     "achievement": {
                                             "gameOne": {
                                                 "achievement": False
@@ -184,8 +192,42 @@ class LiderboardView(ReadOnlyModelViewSet):
             "achievement_count": achievement_count,
             "own_coins": player.own_coins,
             "top_score": player.top_score,
+            "user_review": player.user_review,
             "total_players": players.count(),
             "liderdoard": serializer_board.data
         }
 
         return Response(response_data)
+    
+    
+class PlayerStatistics(APIView):
+    @extend_schema(
+        summary='Получить данные по игрокам и оценке',
+        tags=['Statistics'],
+        description="""
+            "total_players": общее количество зарегистрированных игроков,
+            "players_with_reviews": количество игроков поставивших оценку,
+            "average_review": средняя оценка
+            """,
+    )
+    def get(self, request) -> Response:
+        # Общее количество игроков
+        total_players = Player.objects.count()
+
+        # Количество игроков у которых user_review не равно None
+        players_with_reviews = Player.objects.exclude(user_review=None).count()
+
+        # Средняя оценка игроков с user_review не равным None
+        average_review = Player.objects.exclude(user_review=None).aggregate(Avg('user_review'))['user_review__avg']
+
+        if average_review is None:
+            average_review = 0.0 
+
+        data = {
+            "total_players": total_players,
+            "players_with_reviews": players_with_reviews,
+            "average_review": average_review,
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
+    
