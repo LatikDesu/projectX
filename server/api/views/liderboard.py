@@ -155,8 +155,7 @@ class LiderboardView(ReadOnlyModelViewSet):
                             "own_coins": 0,
                             "top_score": 0,
                             "total_players": 4,
-                            "players_with_reviews": 2,
-                            "average_review": 5,
+                            "user_review": 5,
                             "liderdoard": [
                                 {
                                     "name": "Top_player",
@@ -224,8 +223,6 @@ class LiderboardView(ReadOnlyModelViewSet):
             "top_score": player.top_score,
             "user_review": player.user_review,
             "total_players": players.count(),
-            "players_with_reviews": players.exclude(user_review=None).count(),
-            "average_review": players.exclude(user_review=None).aggregate(Avg('user_review'))['user_review__avg'],
             "liderdoard": serializer_board.data
         }
 
@@ -238,7 +235,7 @@ class PlayerStatistics(APIView):
         tags=['Statistics'],
         description="""
             "total_players": общее количество зарегистрированных игроков,
-            "players_with_reviews": количество игроков поставивших оценку,
+            "players_with_review": количество игроков поставивших оценку,
             "average_review": средняя оценка
             """,
     )
@@ -254,10 +251,12 @@ class PlayerStatistics(APIView):
 
         if average_review is None:
             average_review = 0.0 
+        
+        average_review = round(average_review, 2)
 
         data = {
             "total_players": total_players,
-            "players_with_reviews": players_with_reviews,
+            "players_with_review": players_with_reviews,
             "average_review": average_review,
         }
 
