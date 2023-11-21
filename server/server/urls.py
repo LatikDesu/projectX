@@ -14,7 +14,7 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
-    path('api/v1/statistics/', PlayerStatistics.as_view(), name='statistics'),
+    path('api/v1/stats/', PlayerStatistics.as_view(), name='statistics'),
 ]
 
 urlpatterns += api.urls.router.urls

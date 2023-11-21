@@ -234,9 +234,8 @@ class PlayerStatistics(APIView):
         summary='Получить данные по игрокам и оценке',
         tags=['Statistics'],
         description="""
-            "total_players": общее количество зарегистрированных игроков,
-            "players_with_review": количество игроков поставивших оценку,
-            "average_review": средняя оценка
+            "activeUsersNum": общее количество зарегистрированных игроков,
+            "avgMark": средняя оценка игры
             """,
     )
     def get(self, request) -> Response:
@@ -249,15 +248,14 @@ class PlayerStatistics(APIView):
         # Средняя оценка игроков с user_review не равным None
         average_review = Player.objects.exclude(user_review=None).aggregate(Avg('user_review'))['user_review__avg']
 
-        if average_review is None:
-            average_review = 0.0 
+        if players_with_reviews < 10:
+            average_review = 5
         
-        average_review = round(average_review, 2)
+        average_review = round(average_review, 1)
 
         data = {
-            "total_players": total_players,
-            "players_with_review": players_with_reviews,
-            "average_review": average_review,
+            "activeUsersNum": total_players,
+            "avgMark": average_review,
         }
 
         return Response(data, status=status.HTTP_200_OK)
